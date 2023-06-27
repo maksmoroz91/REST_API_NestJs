@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { RequestsModule } from './requests/requests.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -15,7 +16,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
             database: process.env.DB_DATABASE,
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
-        })
+        }),
+        RequestsModule
     ],
     controllers: [AppController],
     providers: [AppService],
