@@ -12,7 +12,7 @@ export class RequestsController {
 
     @Post()
     @ApiOperation({summary: 'Отправка заявки пользователями системы'})
-    sendRequest(@Body() dto: CreateRequestDto) {
+    sendRequest(@Body() dto: CreateRequestDto): Promise<RequestEntity> {
         return this.requestsService.sendRequest(dto);
     }
 

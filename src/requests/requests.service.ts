@@ -14,13 +14,15 @@ export class RequestsService {
         private readonly nullEmailService: NullEmailService
         ) {}
 
-    async sendRequest(dto: CreateRequestDto) {
-        const request = await this.createRequest(dto);
+    async sendRequest(dto: CreateRequestDto): Promise<RequestEntity> {
+        const newRequest = await this.createRequest(dto);
         const to = "обработка@заявок.ру";
         const subject = 'Новая заявка';
-        const body = JSON.stringify(request);
+        const body = JSON.stringify(newRequest);
 
         this.nullEmailService.sendEmail(to, subject, body);
+
+        return newRequest;
     }
 
     private async createRequest(dto: CreateRequestDto): Promise<RequestEntity> {
@@ -33,14 +35,37 @@ export class RequestsService {
     }
 
     async responsToAnRequestById(id: number, dto: UpdateRequestDto): Promise<RequestEntity> {
-        const respons = await this.requestsRepository.findOne({ where: { id } })
-        if (!respons) {
+        const request = await this.getRequestById(id, dto);
+        const to = request.email;
+        const subject = 'Ответ на вашу заявка';
+        const body = this.formatData(request);
+
+        this.nullEmailService.sendEmail(to, subject, body);
+
+        return request;
+    }
+
+    private async getRequestById(id: number, dto: UpdateRequestDto): Promise<RequestEntity> {
+        const request = await this.requestsRepository.findOne({ where: { id } })
+        if (!request) {
             throw new BadRequestException('Нет заявки с таким ID')
         }
-        respons.status = "Resolved";
-        this.requestsRepository.merge(respons, dto);
+        request.status = "Resolved";
+        this.requestsRepository.merge(request, dto);
 
-        return await this.requestsRepository.save(respons);
+        return await this.requestsRepository.save(request);
+    }
+
+    private formatData(request: RequestEntity): string {
+        const { name, email, message, created_at } = request;
+        const formattedDate = new Date(created_at).toLocaleString();
+
+        return `
+    Имя: ${name}
+    Почта: ${email}
+    Сообщение: ${message}
+    Дата создания: ${formattedDate}
+  `;
     }
 
     async getFilteredList(): Promise<RequestEntity[]> {
