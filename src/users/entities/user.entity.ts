@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { RolesEntity } from "../../roles/entities/roles.entity";
 
 @Entity({name: 'users'})
 export class UserEntity {
@@ -10,4 +11,8 @@ export class UserEntity {
 
     @Column({ nullable: false })
     password: string;
+
+    @ManyToMany(() => RolesEntity, { cascade: true })
+    @JoinTable()
+    roles: RolesEntity[];
 }
