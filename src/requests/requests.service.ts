@@ -26,12 +26,8 @@ export class RequestsService {
     }
 
     private async createRequest(dto: CreateRequestDto): Promise<RequestEntity> {
-        try {
-            const newRequest = await this.requestsRepository.create(dto);
-            return await this.requestsRepository.save(newRequest);
-        } catch (e) {
-            throw new BadRequestException(`Нужно указать значение для столбца: ${ e.column }`)
-        }
+        const newRequest = await this.requestsRepository.create(dto);
+        return await this.requestsRepository.save(newRequest);
     }
 
     async responsToAnRequestById(id: number, dto: UpdateRequestDto): Promise<RequestEntity> {

@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RequestsModule } from './requests/requests.module';
 import { EmailModule } from './email/email.module';
+import { UsersModule } from './users/users.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -17,7 +18,8 @@ import { EmailModule } from './email/email.module';
             synchronize: true,
         }),
         RequestsModule,
-        EmailModule
+        EmailModule,
+        UsersModule
     ],
     controllers: [],
     providers: [],
