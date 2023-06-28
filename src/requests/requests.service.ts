@@ -4,16 +4,23 @@ import { Repository } from "typeorm";
 import { RequestEntity } from "./entities/request.entity";
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
+import { NullEmailService } from "../email/null-email.service";
 
 @Injectable()
 export class RequestsService {
 
-    constructor(@InjectRepository(RequestEntity) private requestsRepository: Repository<RequestEntity>) {
-    }
+    constructor(
+        @InjectRepository(RequestEntity) private readonly requestsRepository: Repository<RequestEntity>,
+        private readonly nullEmailService: NullEmailService
+        ) {}
 
     async sendRequest(dto: CreateRequestDto) {
+        const request = await this.createRequest(dto);
+        const to = "обработка@заявок.ру";
+        const subject = 'Новая заявка';
+        const body = JSON.stringify(request);
 
-
+        this.nullEmailService.sendEmail(to, subject, body);
     }
 
     private async createRequest(dto: CreateRequestDto): Promise<RequestEntity> {

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RequestsModule } from './requests/requests.module';
+import { EmailModule } from './email/email.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -17,7 +18,8 @@ import { RequestsModule } from './requests/requests.module';
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
         }),
-        RequestsModule
+        RequestsModule,
+        EmailModule
     ],
     controllers: [AppController],
     providers: [AppService],
