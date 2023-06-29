@@ -15,8 +15,8 @@ export class AuthController {
     @ApiOperation({summary: "Аутентификация"})
     @Post("login")
     @ApiBody({type: CreateUserDto})
-    async login(@Request() dto: CreateUserDto): Promise<{token: string}> {
-        return this.authService.login(dto);
+    async login(@Request() req): Promise<{token: string}> {
+        return this.authService.login(req.user as UserEntity);
     }
 
     @ApiOperation({summary: "Регистрация"})

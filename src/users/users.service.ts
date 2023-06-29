@@ -19,7 +19,10 @@ export class UsersService {
     }
 
     async findUserById(id: number): Promise<UserEntity> {
-        return await this.usersRepository.findOneBy({ id });
+        return await this.usersRepository.findOne({
+            where: { id },
+            relations: ["role"]
+        });
     }
 
     async createUser(dto: CreateUserDto, checkAdminPassword: boolean): Promise<UserEntity> {

@@ -14,9 +14,11 @@ export class AuthService {
     ) {
     }
 
-    async login(user): Promise<{token: string}> {
+    async login(userEntity: UserEntity): Promise<{token: string}> {
+        const user = await this.usersService.findUserById(userEntity.id);
+        const payload = { id: user.id, email: user.email, role: user.role.value}
         return {
-            token: this.jwtService.sign({ id: user.id, email: user.email})
+            token: this.jwtService.sign(payload)
         };
     }
 
@@ -33,16 +35,14 @@ export class AuthService {
         return this.usersService.createUser({...dto, password: hashPassword}, checkAdminPassword);
     }
 
-    async validateUser(email: string, password: string): Promise<{token: string}> {
+    async validateUser(email: string, password: string): Promise<UserEntity> {
         const user = await this.usersService.findUserByEmail(email);
 
         if (user) {
             const passwordEquals: boolean = await bcrypt.compare(password, user.password);
 
             if (user && passwordEquals) {
-                return {
-                    token: this.jwtService.sign({email: user.email})
-                };
+                return user;
             }
         }
 
