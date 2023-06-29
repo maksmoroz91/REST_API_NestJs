@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./entities/user.entity";
-import { QueryFailedError, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { RolesService } from "../roles/roles.service";
 
@@ -17,7 +17,7 @@ export class UsersService {
         try {
             const newUser = await this.usersRepository.create(dto);
             const role = await this.rolesService.getRoleByValue('user');
-            newUser.roles = [role]
+            newUser.role = role
 
             return await this.usersRepository.save(newUser);
         } catch (e) {
@@ -28,6 +28,6 @@ export class UsersService {
     }
 
     async getAllUsers(): Promise<CreateUserDto[]> {
-        return await this.usersRepository.find({ relations: ['roles'] });
+        return await this.usersRepository.find({ relations: ['role'] });
     }
 }
