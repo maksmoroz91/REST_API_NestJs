@@ -11,23 +11,28 @@ export class UsersService {
     constructor(
         @InjectRepository(UserEntity) private readonly usersRepository: Repository<UserEntity>,
         private readonly rolesService: RolesService
-    ) {}
+    ) {
+    }
 
-    async createUser(dto: CreateUserDto) {
-        try {
-            const newUser = await this.usersRepository.create(dto);
-            const role = await this.rolesService.getRoleByValue('user');
-            newUser.role = role
+    async findUserByEmail(email: string): Promise<UserEntity> {
+        return this.usersRepository.findOneBy({ email });
+    }
 
-            return await this.usersRepository.save(newUser);
-        } catch (e) {
-            if (e.code === '23505') {
-                throw new BadRequestException("Пользователь с такой почтой уже существует")
-            }
+    async findUserById(id: number): Promise<UserEntity> {
+        return this.usersRepository.findOneBy({ id });
+    }
+
+    async createUser(dto: CreateUserDto, checkAdminPassword: boolean): Promise<UserEntity> {
+        const newUser = await this.usersRepository.create(dto);
+        if (checkAdminPassword) {
+            newUser.role = await this.rolesService.getRoleByValue("admin");
         }
+        newUser.role = await this.rolesService.getRoleByValue("user");
+
+        return await this.usersRepository.save(newUser);
     }
 
-    async getAllUsers(): Promise<CreateUserDto[]> {
-        return await this.usersRepository.find({ relations: ['role'] });
-    }
+    // async getAllUsers(): Promise<CreateUserDto[]> {
+    //     return await this.usersRepository.find({ relations: ['role'] });
+    // }
 }
