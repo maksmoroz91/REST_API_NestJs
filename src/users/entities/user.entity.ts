@@ -1,7 +1,7 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { RolesEntity } from "../../roles/entities/roles.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { RoleEntity } from "../../roles/entities/role.entity";
 
-@Entity({name: 'users'})
+@Entity({name: "users"})
 export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,7 +12,7 @@ export class UserEntity {
     @Column({ nullable: false })
     password: string;
 
-    @ManyToMany(() => RolesEntity, { cascade: true })
-    @JoinTable()
-    roles: RolesEntity[];
+    @ManyToOne(() => RoleEntity)
+    @JoinColumn({ name: "roles_entity_id" })
+    role: RoleEntity;
 }
