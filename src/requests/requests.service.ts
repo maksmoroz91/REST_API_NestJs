@@ -5,28 +5,32 @@ import { RequestEntity } from "./entities/request.entity";
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { NullEmailService } from "../email/null-email.service";
+import { UsersService } from "../users/users.service";
 
 @Injectable()
 export class RequestsService {
 
     constructor(
         @InjectRepository(RequestEntity) private readonly requestsRepository: Repository<RequestEntity>,
-        private readonly nullEmailService: NullEmailService
+        private readonly nullEmailService: NullEmailService,
+        private readonly usersService: UsersService
         ) {}
 
-    async sendRequest(dto: CreateRequestDto): Promise<RequestEntity> {
-        const newRequest = await this.createRequest(dto);
+    async sendRequest(dto: CreateRequestDto, userId: number): Promise<RequestEntity> {
+        const newRequest = await this.createRequest(dto, userId);
         const to = "обработка@заявок.ру";
         const subject = 'Новая заявка';
-        const body = JSON.stringify(newRequest);
+        const body = this.formatData(newRequest);
 
         this.nullEmailService.sendEmail(to, subject, body);
 
         return newRequest;
     }
 
-    private async createRequest(dto: CreateRequestDto): Promise<RequestEntity> {
-        const newRequest = await this.requestsRepository.create(dto);
+    private async createRequest(dto: CreateRequestDto, userId: number): Promise<RequestEntity> {
+        const user = await this.usersService.findUserById(userId);
+        const newRequest = await this.requestsRepository.create({ ...dto, name: user.name, email: user.email });
+
         return await this.requestsRepository.save(newRequest);
     }
 
@@ -34,7 +38,7 @@ export class RequestsService {
         const request = await this.getRequestById(id, dto);
         const to = request.email;
         const subject = 'Ответ на вашу заявка';
-        const body = this.formatData(request);
+        const body = request.comment;
 
         this.nullEmailService.sendEmail(to, subject, body);
 

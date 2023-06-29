@@ -32,8 +32,4 @@ export class UsersService {
 
         return await this.usersRepository.save(newUser);
     }
-
-    async getAllUsers(): Promise<CreateUserDto[]> {
-        return await this.usersRepository.find({ relations: ['role'] });
-    }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { RoleEntity } from "./entities/role.entity";
@@ -10,14 +10,8 @@ export class RolesController {
     constructor(private readonly rolesService: RolesService) {}
 
     @Post()
-    @ApiOperation({summary: 'Создание роли'})
+    @ApiOperation({summary: 'Создание роли (user, admin)'})
     createRole(@Body() dto: CreateRoleDto): Promise<RoleEntity> {
         return this.rolesService.createRole(dto)
-    }
-
-    @Get(':value')
-    @ApiOperation({summary: 'Вернет роль по значению (user, admin)'})
-    getRoleByValue(@Param('value') value: string): Promise<RoleEntity> {
-        return this.rolesService.getRoleByValue(value);
     }
 }

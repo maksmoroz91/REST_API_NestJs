@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, UseGuards } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Put, UseGuards, Request } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -18,8 +18,8 @@ export class RequestsController {
 
     @Post()
     @ApiOperation({summary: 'Отправка заявки пользователями системы'})
-    sendRequest(@Body() dto: CreateRequestDto): Promise<RequestEntity> {
-        return this.requestsService.sendRequest(dto);
+    sendRequest(@Request() req, @Body() dto: CreateRequestDto): Promise<RequestEntity> {
+        return this.requestsService.sendRequest(dto, req.user.id);
     }
 
     @Get()

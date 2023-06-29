@@ -5,10 +5,10 @@ export class RequestEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     name: string;
 
-    @Column({ nullable: false })
+    @Column({ nullable: true })
     email: string;
 
     @Column({default: "Active"})

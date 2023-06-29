@@ -6,6 +6,8 @@ import { RequestEntity } from "./entities/request.entity";
 import { EmailModule } from "../email/email.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { UsersService } from "../users/users.service";
+import { UsersModule } from "../users/users.module";
 
 @Module({
     controllers: [RequestsController],
@@ -13,6 +15,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
     imports: [
         TypeOrmModule.forFeature([RequestEntity]),
         EmailModule,
+        UsersModule,
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
