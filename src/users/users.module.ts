@@ -12,6 +12,7 @@ import { RolesModule } from "../roles/roles.module";
     imports: [
         TypeOrmModule.forFeature([UserEntity, RoleEntity]),
         RolesModule
-    ]
+    ],
+    exports: [UsersService]
 })
 export class UsersModule {}

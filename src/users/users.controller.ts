@@ -9,13 +9,9 @@ export class UsersController {
 
     constructor(private readonly usersService: UsersService) {}
 
-    @Post()
-    @ApiOperation({summary: 'Создание пользователя'})
-    createUser(@Body() dto: CreateUserDto): Promise<CreateUserDto> {
-        return this.usersService.createUser(dto);
-    }
 
     @Get()
+    @ApiOperation({summary: 'Получение всех пользователей'})
     getAllUsers(): Promise<CreateUserDto[]> {
         return this.usersService.getAllUsers()
     }

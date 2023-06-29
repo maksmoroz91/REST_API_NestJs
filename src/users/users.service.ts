@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./entities/user.entity";
 import { Repository } from "typeorm";
@@ -15,24 +15,22 @@ export class UsersService {
     }
 
     async findUserByEmail(email: string): Promise<UserEntity> {
-        return this.usersRepository.findOneBy({ email });
+        return await this.usersRepository.findOneBy({ email });
     }
 
     async findUserById(id: number): Promise<UserEntity> {
-        return this.usersRepository.findOneBy({ id });
+        return await this.usersRepository.findOneBy({ id });
     }
 
     async createUser(dto: CreateUserDto, checkAdminPassword: boolean): Promise<UserEntity> {
         const newUser = await this.usersRepository.create(dto);
-        if (checkAdminPassword) {
-            newUser.role = await this.rolesService.getRoleByValue("admin");
-        }
-        newUser.role = await this.rolesService.getRoleByValue("user");
+        const roleValue = checkAdminPassword ? "admin" : "user";
+        newUser.role = await this.rolesService.getRoleByValue(roleValue);
 
         return await this.usersRepository.save(newUser);
     }
 
-    // async getAllUsers(): Promise<CreateUserDto[]> {
-    //     return await this.usersRepository.find({ relations: ['role'] });
-    // }
+    async getAllUsers(): Promise<CreateUserDto[]> {
+        return await this.usersRepository.find({ relations: ['role'] });
+    }
 }

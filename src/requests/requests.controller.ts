@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Param, Put } from "@nestjs/common";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Controller, Get, Post, Body, Param, Put, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import { RequestEntity } from "./entities/request.entity";
+import { JwtAuthGuard } from "../auth/guards/jwt.guard";
 
 @Controller('requests')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags("Заявки")
 export class RequestsController {
     constructor(private readonly requestsService: RequestsService) {}

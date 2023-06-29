@@ -5,6 +5,7 @@ import { RequestsModule } from './requests/requests.module';
 import { EmailModule } from './email/email.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -21,7 +22,8 @@ import { RolesModule } from './roles/roles.module';
         RequestsModule,
         EmailModule,
         UsersModule,
-        RolesModule
+        RolesModule,
+        AuthModule
     ],
     controllers: [],
     providers: [],
