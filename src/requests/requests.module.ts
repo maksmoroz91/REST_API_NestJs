@@ -1,12 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { RequestsService } from './requests.service';
-import { RequestsController } from './requests.controller';
+import { JwtModule } from "@nestjs/jwt";
+import { RequestsService } from "./requests.service";
+import { RequestsController } from "./requests.controller";
 import { RequestEntity } from "./entities/request.entity";
 import { EmailModule } from "../email/email.module";
-import { JwtModule } from "@nestjs/jwt";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { UsersService } from "../users/users.service";
 import { UsersModule } from "../users/users.module";
 
 @Module({

@@ -2,8 +2,8 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RequestEntity } from "./entities/request.entity";
-import { CreateRequestDto } from './dto/create-request.dto';
-import { UpdateRequestDto } from './dto/update-request.dto';
+import { CreateRequestDto } from "./dto/create-request.dto";
+import { UpdateRequestDto } from "./dto/update-request.dto";
 import { NullEmailService } from "../email/null-email.service";
 import { UsersService } from "../users/users.service";
 
@@ -19,7 +19,7 @@ export class RequestsService {
     async sendRequest(dto: CreateRequestDto, userId: number): Promise<RequestEntity> {
         const newRequest = await this.createRequest(dto, userId);
         const to = "обработка@заявок.ру";
-        const subject = 'Новая заявка';
+        const subject = "Новая заявка";
         const body = this.formatData(newRequest);
 
         this.nullEmailService.sendEmail(to, subject, body);
@@ -37,7 +37,7 @@ export class RequestsService {
     async responsToAnRequestById(id: number, dto: UpdateRequestDto): Promise<RequestEntity> {
         const request = await this.getRequestById(id, dto);
         const to = request.email;
-        const subject = 'Ответ на вашу заявка';
+        const subject = "Ответ на вашу заявка";
         const body = request.comment;
 
         this.nullEmailService.sendEmail(to, subject, body);
@@ -48,7 +48,7 @@ export class RequestsService {
     private async getRequestById(id: number, dto: UpdateRequestDto): Promise<RequestEntity> {
         const request = await this.requestsRepository.findOne({ where: { id } })
         if (!request) {
-            throw new BadRequestException('Нет заявки с таким ID')
+            throw new BadRequestException("Нет заявки с таким ID")
         }
         request.status = "Resolved";
         this.requestsRepository.merge(request, dto);
@@ -70,7 +70,7 @@ export class RequestsService {
 
     async getFilteredList(): Promise<RequestEntity[]> {
         return await this.requestsRepository.find({
-            order: { status: 'ASC' },
+            order: { status: "ASC" },
         });
     }
 }

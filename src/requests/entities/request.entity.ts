@@ -1,6 +1,6 @@
 import { BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name: 'requests'})
+@Entity({name: "requests"})
 export class RequestEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -20,10 +20,10 @@ export class RequestEntity {
     @Column({ nullable: true })
     comment: string;
 
-    @CreateDateColumn({ type: 'timestamp' })
+    @CreateDateColumn({ type: "timestamp" })
     created_at: Date;
 
-    @Column({ type: 'timestamp', nullable: true })
+    @Column({ type: "timestamp", nullable: true })
     updated_at: Date;
 
     @BeforeUpdate()
