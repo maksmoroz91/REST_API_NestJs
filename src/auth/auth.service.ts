@@ -11,12 +11,12 @@ export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService
-    ) {
-    }
+    ) {}
 
     async login(userEntity: UserEntity): Promise<{token: string}> {
         const user = await this.usersService.findUserById(userEntity.id);
         const payload = { id: user.id, email: user.email, role: user.role.value}
+
         return {
             token: this.jwtService.sign(payload)
         };
@@ -30,8 +30,8 @@ export class AuthService {
         }
         const adminPassword = process.env.ADMIN_PASSWORD;
         const checkAdminPassword: boolean = adminPassword === dto.password;
-
         const hashPassword = await bcrypt.hash(dto.password, 5);
+
         return this.usersService.createUser({...dto, password: hashPassword}, checkAdminPassword);
     }
 

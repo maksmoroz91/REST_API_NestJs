@@ -47,6 +47,7 @@ export class RequestsService {
 
     private async getRequestById(id: number, dto: UpdateRequestDto): Promise<RequestEntity> {
         const request = await this.requestsRepository.findOne({ where: { id } })
+
         if (!request) {
             throw new BadRequestException("Нет заявки с таким ID")
         }

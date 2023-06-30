@@ -7,6 +7,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
         if (err || !user) {
             throw new UnauthorizedException("Доступ разрешен только для авторизованных пользователей.");
         }
+
         return user;
     }
 }
